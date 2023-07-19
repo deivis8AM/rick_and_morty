@@ -1,25 +1,96 @@
-import logo from './logo.svg';
+import { useState, useEffect } from 'react';
+import axios from "axios";
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import Detail from './views/detail/detail';
+import About from './views/about/about';
+import Cards from './components/cards/Cards';
+import logoRM from './assets/logorm.png'
+import NavBar from './components/navBar/navBar'; 
+
 import './App.css';
+import ErrorPage from './views/error/errorPage';
+import LandingPage from './views/landingPage/landingPage';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+   const[characters, setCharacters] = useState([]);
+   const [access, setAccess] = useState(false);
+
+   const location = useLocation();
+   const navigate = useNavigate();
+
+   const EMAIL = 'ejemplo@gmail.com';
+   const PASSWORD = '1Password';
+
+   function login(userData) {
+      if (userData.password === PASSWORD && userData.email === EMAIL) {
+         setAccess(true);
+         navigate('/home');
+      }
+   }
+
+   useEffect(() => {
+      !access && navigate('/');
+   }, [access]);
+
+   function searchHandler(id) {
+      
+         axios(`https://rickandmortyapi.com/api/character/${id}`).then(({data}) => {
+            if (data.name) {
+               setCharacters((oldChars) => [...oldChars, data]);
+            } else {
+               window.alert('¡No hay personajes con este ID!');
+            }
+         });
+    }
+
+   function closeHandler(id) {
+      let deleted = characters.filter((character) => character.id !== Number(id));
+      setCharacters(deleted);
+   }
+
+   function randomHandler() {
+      let haveIt = [];
+      // Genera nuemro aleatorio
+      let random = (Math.random() * 826).toFixed();
+
+      random = Number(random);
+
+      if (!haveIt.includes(random)) {
+         haveIt.push(random);
+         fetch(`https://rickandmortyapi.com/api/character/${random}`)
+         .then((response) => response.json())
+         .then((data) => {
+            if (data.name) {
+               setCharacters((oldChars) => [...oldChars, data]);
+            } else {
+               Window.alert("No hay personajes con ese ID");
+            }
+         });
+      } else {
+         console.log("Ya agregaste todos los personajes");
+         return false;
+      } 
+   }
+
+   return (
+      <div className='App'>
+         <img className='title' src={logoRM} alt='logo'/>
+
+{location.pathname !== "/" && (
+<NavBar onSearch={searchHandler} random={randomHandler}/> 
+)}
+
+<Routes>
+<Route path='/' element={<LandingPage login={login} />} />
+   <Route 
+      path='/home' 
+      element={ <Cards characters={characters} onClose={closeHandler}/>}/>
+   <Route path='/detail/:id' element={<Detail/>} />
+   <Route path='/about' element={<About />} />
+   <Route path='*' element={<ErrorPage/>} /> {/*Apuntar otra ruta no sea la indicada*/}
+</Routes>
+  </div>
+   );
 }
 
 export default App;
