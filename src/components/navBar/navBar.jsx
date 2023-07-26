@@ -10,6 +10,7 @@ export default function NavBar({onSearch, random}) {
 <div>
     <Link to="/about">About</Link>
     <Link to="/home">Home</Link>
+    <Link to="/favorites">Favs</Link>
 </div>
 
 

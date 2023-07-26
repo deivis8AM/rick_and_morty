@@ -10,6 +10,7 @@ import NavBar from './components/navBar/navBar';
 import './App.css';
 import ErrorPage from './views/error/errorPage';
 import LandingPage from './views/landingPage/landingPage';
+import Favarites from './views/favorites/favarites';
 
 function App() {
    const[characters, setCharacters] = useState([]);
@@ -87,6 +88,7 @@ function App() {
       element={ <Cards characters={characters} onClose={closeHandler}/>}/>
    <Route path='/detail/:id' element={<Detail/>} />
    <Route path='/about' element={<About />} />
+   <Route path='/favorites' element={<Favarites/>} />
    <Route path='*' element={<ErrorPage/>} /> {/*Apuntar otra ruta no sea la indicada*/}
 </Routes>
   </div>
