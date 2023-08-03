@@ -1,4 +1,4 @@
-import { ADD_FAV, REMOVE_FAV, ORDER, FILTER, RESET } from "./actions"
+import { ADD_FAV, REMOVE_FAV, ORDER, FILTER, RESET } from "./actions";
 
 let initialState = {
     myFavorites:[],

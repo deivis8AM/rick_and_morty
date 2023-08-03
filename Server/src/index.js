@@ -1,5 +1,6 @@
 const express = require("express");
 const router = require("./routes");
+const morgan = require("morgan");
 const server = express();
 const PORT = 3001;
 
@@ -22,6 +23,8 @@ server.use((req, res, next) => {
     });
 
 server.use(express.json()); // transforma los archivos json
+
+server.use(morgan("dev"));
 
 server.use("/rickandmorty",router);   //Crea un middleware que agregue el string "/rickandmorty" antes de cada una de tus rutas.
 

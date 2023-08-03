@@ -3,12 +3,13 @@ const URL = 'https://rickandmortyapi.com/api/character/';
 // const { response } = require('express');
 
 
-const getCharById = (req, res) => {
+const getCharById = async (req, res) => {   //Asignamos el async 
+
+try {   // Hacemos tryCatch
   const {id} = req.params;
 
-     axios(URL + id)    // hacemos la peticion a la app 
-     .then((response) => response.data)
-     .then(( data) => {     // Hacemos una promesa 
+  const {data} = await axios(URL + id)    // hacemos la peticion a la app  // Asignamos await pero antes destruturamos a {data} 
+     
         const character = {
           id: data.id,
           name: data.name,
@@ -22,10 +23,9 @@ const getCharById = (req, res) => {
        character.name
         ? res.status(200).json(character)
         : res.status(404).send("Not found")
-     })
-     .catch((error) => {     // Atrapamos el error con catch
-         res.status(500).json({message: error.message}) // en viamos el error 
-     });
+      } catch (error) {
+         res.status(500).json({message: error.message}); // en viamos el error 
+     };
 };
 
 // exportamos a getCharById
